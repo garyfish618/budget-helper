@@ -29,7 +29,7 @@ class BudgetCreator:
 
             # Create budget categories from templates
             for category_template in category_templates:
-                budget_category = BudgetMonthCategory(name=category_template.name, amount_left=category_template.amount_budgeted, budget_month_id=budget_month.id)
+                budget_category = BudgetMonthCategory(name=category_template.name, amount_budgeted=category_template.amount_budgeted, budget_month_id=budget_month.id)
                 session.add(budget_category)
             
             session.commit()

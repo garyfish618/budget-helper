@@ -7,30 +7,23 @@ from models import Transaction
 from datetime import datetime
 
 
-class AmexBudgetParser():
+class NfcuBudgetParser():
     def begin(self, budget_month):
         console.clear()
-        scraper_choice = display_choices_prompt(["Use AMEX Scraper", "Download manually"], "Use AMEX scraper or grab from directory?")
         try:
             config = configparser.ConfigParser()
             config.read('config.ini')
-            if scraper_choice == "Use AMEX Scraper":
-                print_msg("Running AMEX scraper please wait...")
-                if not AmexScraper.run(config['DEFAULT']['amex_username'], config['DEFAULT']['amex_password']):
-                    print_error("Error downloading AMEX transaction history")
-                    return
-
             categories = budget_month.categories
 
-            # Read from config activity csv directory
+            # Read from config transactions csv directory
             directory_path = config['DEFAULT']['download_directory']
-            csv_path = os.path.join(directory_path, 'activity.csv')
+            csv_path = os.path.join(directory_path, 'transactions.csv')
             with open(csv_path, "r") as csv_file:
                 csv_reader = csv.DictReader(csv_file)
 
                 for row in csv_reader:
                     description = row["Description"]
-                    amount = row["Amount"]
+                    amount = row["Debit"]
                     date = datetime.strptime(row["Date"], "%m/%d/%Y").date()
                     category = display_choices_prompt([*categories.all(), "SKIP"], f'{row["Description"]} ${row["Amount"]}\nSelect a category for this transaction')
                     if category == "SKIP":

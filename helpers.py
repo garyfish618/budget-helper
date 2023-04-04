@@ -87,8 +87,8 @@ def print_success(success_text):
 def print_error(error_text):
     console.print(error_text, style="red")
 
-def print_msg(msg):
-    console.print(msg)
+def print_msg(msg, style=None):
+    console.print(msg, style=style)
 
 def valid_year(year):
     try:
