@@ -1,2 +1,4 @@
 __pycache__
+alembic/versions/__pycache__
 budget.db
+.vscode

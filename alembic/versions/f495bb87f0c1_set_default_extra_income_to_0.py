@@ -18,12 +18,10 @@ depends_on = None
 default_value = "0"
 
 def upgrade():
-    op.execute("ALTER TABLE budget_month ALTER COLUMN extra_income SET DEFAULT '0';")
-    op.execute("UPDATE budget_month SET extra_income = '0' WHERE extra_income IS NULL;")
-    op.execute("ALTER TABLE budget_month ALTER COLUMN extra_income SET NOT NULL;")
+    op.add_column('budget_month', sa.Column('extra_income', sa.String, server_default="0", nullable=False))
+
 
 
 def downgrade():
-    # Set the extra_income column back to its original state
-    op.execute("ALTER TABLE budget_month ALTER COLUMN extra_income DROP NOT NULL;")
-    op.execute("ALTER TABLE budget_month ALTER COLUMN extra_income DROP DEFAULT;")
+    op.drop_column('budget_month', 'extra_income')
+    op.add_column('budget_month', sa.Column('extra_income', sa.String))

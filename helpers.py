@@ -87,6 +87,18 @@ def print_success(success_text):
 def print_error(error_text):
     console.print(error_text, style="red")
 
+def print_money(money_amt, message=None):
+    output = ""
+    if message != None:
+        output += message + ": "
+    
+    if money_amt >= 0:
+        output += f'[green]${money_amt:.2f}[/green]'
+    else:
+        output += f'[red]${money_amt:.2f}[/red]'
+
+    console.print(output, highlight=False)
+
 def print_msg(msg, style=None):
     console.print(msg, style=style)
 
