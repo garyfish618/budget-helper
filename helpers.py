@@ -102,6 +102,10 @@ def print_money(money_amt, message=None):
 def print_msg(msg, style=None):
     console.print(msg, style=style)
 
+def valid_day(day):
+    day = int(day)
+    return day >= 1 and day <= 31
+
 def valid_year(year):
     try:
         year = int(year)

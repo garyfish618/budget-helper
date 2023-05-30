@@ -41,5 +41,5 @@ class Transaction(Base):
     amount = Column(String, nullable=False)
     date = Column(Date, nullable=False)
     budget_category_id = Column(Integer, ForeignKey('budget_month_category.id'))
-
+    transaction_type = Column(String, nullable=False)
 Base.metadata.create_all(engine)

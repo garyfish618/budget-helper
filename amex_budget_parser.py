@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 class AmexBudgetParser():
-    def begin(self, budget_month):
+    def begin(self, budget_month, start_day, end_day):
         console.clear()
         scraper_choice = display_choices_prompt(["Use AMEX Scraper", "Download manually"], "Use AMEX scraper or grab from directory?")
         try:
@@ -32,11 +32,15 @@ class AmexBudgetParser():
                     description = row["Description"]
                     amount = row["Amount"]
                     date = datetime.strptime(row["Date"], "%m/%d/%Y").date()
+
+                    if date.day < start_day or date.day > end_day:
+                        continue
+
                     category = display_choices_prompt([*categories.all(), "SKIP"], f'{row["Description"]} ${row["Amount"]}\nSelect a category for this transaction')
                     if category == "SKIP":
                         continue
 
-                    transaction = Transaction(description=description, amount=amount, date=date, budget_category_id=category.id)
+                    transaction = Transaction(description=description, amount=amount, date=date, budget_category_id=category.id, transaction_type="AMEX")
                     session.add(transaction)
                     console.clear()
 

@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 class NfcuBudgetParser():
-    def begin(self, budget_month):
+    def begin(self, budget_month, transaction_type, start_day, end_day):
         console.clear()
         try:
             config = configparser.ConfigParser()
@@ -24,12 +24,21 @@ class NfcuBudgetParser():
                 for row in csv_reader:
                     description = row["Description"]
                     amount = row["Debit"]
-                    date = datetime.strptime(row["Date"], "%m/%d/%Y").date()
-                    category = display_choices_prompt([*categories.all(), "SKIP"], f'{row["Description"]} ${row["Amount"]}\nSelect a category for this transaction')
+                    date_string = ""
+                    if transaction_type == "NFCUCredit":
+                        date_string = row["Transaction Date"]
+                    else:    
+                        date_string = row["Date"]
+                    date = datetime.strptime(date_string, "%m/%d/%Y").date()
+
+                    if date.day < start_day or date.day > end_day:
+                        continue
+
+                    category = display_choices_prompt([*categories.all(), "SKIP"], f'{row["Description"]} ${row["Debit"]}\nSelect a category for this transaction')
                     if category == "SKIP":
                         continue
 
-                    transaction = Transaction(description=description, amount=amount, date=date, budget_category_id=category.id)
+                    transaction = Transaction(description=description, amount=amount, date=date, budget_category_id=category.id, transaction_type=transaction_type)
                     session.add(transaction)
                     console.clear()
 
